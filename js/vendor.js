@@ -1,5 +1,7 @@
 const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
+const cart = document.querySelector(".cart");
+const checkout = document.querySelector(".checkout");
 let notifyCount = 0;
 
 for (let button of clickAnchor) {
@@ -15,7 +17,7 @@ for (let button of clickAnchor) {
       notify.style.display = `inline-block`;
       notifyCount++;
       notify.innerText = notifyCount;
-       //OR use prefix plus plus operator:  notify.innerText = ++notifyCount;
+      //OR use prefix plus plus operator:  notify.innerText = ++notifyCount;
     } else if (button.innerText === "Remove") {
       button.style.backgroundColor = "#fff";
       button.style.color = "#ad4c4c";
@@ -29,3 +31,9 @@ for (let button of clickAnchor) {
     }
   });
 }
+
+let openCheckout = false;
+cart.addEventListener("click", function () {
+  checkout.style.display = `inline-block`;
+  //{add state variable}
+});
