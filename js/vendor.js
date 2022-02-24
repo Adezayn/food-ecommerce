@@ -2,6 +2,7 @@ const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
 const checkout = document.querySelector(".checkout");
+const total = document.querySelector(".total-result")
 let notifyCount = 0;
 
 for (let button of clickAnchor) {
