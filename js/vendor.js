@@ -11,7 +11,7 @@ const result = document.querySelector(".total-result");
 let notifyCount = 0;
 
 ////////FUNCTIONS FOR FEATURES
-//to add puchases to the menu list
+//TO ADD PURCHASES TO THE MENU LIST
 const purchase = function (item, cost) {
   const html = `<div class="purchase">
   <div class="purchase-item">${item.textContent}</div>
@@ -20,17 +20,27 @@ const purchase = function (item, cost) {
   checkout.insertAdjacentHTML("afterbegin", html);
 };
 
-//to remove already selected purchases from the menu list
-const removePurchase = function(foodItem){
+//TO REMOVE ALREADY SELECTED PURCHASES FROM THE MENU LIST
+const removePurchase = function (foodItem) {
   //converting updated HTMLCollection list to an Array
-const purchaseArray = [...purchaseMade];
-const selectedItem = purchaseArray.findIndex(ele => {
-  //looping through the array to return the selected item using the food-item name
- return ele.firstElementChild.innerText === foodItem.innerText;
-  } );
+  const purchaseArray = [...purchaseMade];
+  const selectedItem = purchaseArray.findIndex((ele) => {
+    //looping through the array to return the selected item using the food-item name
+    return ele.firstElementChild.innerText === foodItem.innerText;
+  });
   //returns the food item selected to be removed
   return selectedItem;
-} 
+};
+
+//ADDING FOR THE MENU LIST
+const appearMenu = function (check = false) {
+  if (check && notifyCount > 0) {
+    checkoutBox.style.display = `inline-block`;
+  } else {
+    checkoutBox.style.display = `none`;
+  }
+  return check;
+};
 
 for (
   let i = 0;
@@ -56,17 +66,18 @@ for (
       clickAnchor[i].innerText = "Add to Cart";
       notifyCount--;
       notify.innerText = notifyCount;
-     //passing the index of the selected item to the HTMLCollection to be removed.
+      //passing the index of the selected item to the HTMLCollection to be removed.
       purchaseMade[removePurchase(foodItem[i])].remove();
-      
     }
     if (notifyCount <= 0) {
       notify.style.display = `none`;
+      checkoutBox.style.display = `none`;
     }
   });
 }
 let openCheckout = false;
 cart.addEventListener("click", function () {
-  checkoutBox.style.display = `inline-block`;
   //{add state variable}
+  appearMenu(!openCheckout);
+  openCheckout = !openCheckout;
 });

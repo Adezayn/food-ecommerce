@@ -92,7 +92,7 @@ nav a:last-child {
   border-radius: 24px;
   z-index: 100;
   text-align: center;
- /*display: none;*/
+ display: none;
 }
 .checkout::before {
   content: "";
