@@ -1,40 +1,72 @@
 const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
+const checkoutBox = document.querySelector(".checkout-box");
 const checkout = document.querySelector(".checkout");
-const total = document.querySelector(".total-result")
+const purchaseMade = document.getElementsByClassName("purchase");
+const foodItem = document.querySelectorAll(".food-item");
+const foodCost = document.querySelectorAll(".food-cost");
+//const total = document.querySelector(".total-box")
+const result = document.querySelector(".total-result");
 let notifyCount = 0;
 
-for (let button of clickAnchor) {
-  console.log(button);
+////////FUNCTIONS FOR FEATURES
+//to add puchases to the menu list
+const purchase = function (item, cost) {
+  const html = `<div class="purchase">
+  <div class="purchase-item">${item.textContent}</div>
+  <div class="purchase-cost">${cost.textContent}</div>
+  </div>`;
+  checkout.insertAdjacentHTML("afterbegin", html);
+};
 
-  button.addEventListener("click", function () {
-    if (button.innerText === "Add to Cart") {
-      button.style.backgroundColor = "#A5A5A5";
-      button.style.color = "rgba(255, 255, 255, 1)";
-      button.style.border = "none";
-      button.innerHTML =
+//to remove already selected purchases from the menu list
+const removePurchase = function(foodItem){
+  //converting updated HTMLCollection list to an Array
+const purchaseArray = [...purchaseMade];
+const selectedItem = purchaseArray.findIndex(ele => {
+  //looping through the array to return the selected item using the food-item name
+ return ele.firstElementChild.innerText === foodItem.innerText;
+  } );
+  //returns the food item selected to be removed
+  return selectedItem;
+} 
+
+for (
+  let i = 0;
+  i < clickAnchor.length, i < foodItem.length, i < foodCost.length;
+  i++
+) {
+  clickAnchor[i].addEventListener("click", function () {
+    if (clickAnchor[i].innerText === "Add to Cart") {
+      clickAnchor[i].style.backgroundColor = "#A5A5A5";
+      clickAnchor[i].style.color = "rgba(255, 255, 255, 1)";
+      clickAnchor[i].style.border = "none";
+      clickAnchor[i].innerHTML =
         '<img src = "../assets/remove.svg" class = "remove"/>Remove';
       notify.style.display = `inline-block`;
       notifyCount++;
       notify.innerText = notifyCount;
-      //OR use prefix plus plus operator:  notify.innerText = ++notifyCount;
-    } else if (button.innerText === "Remove") {
-      button.style.backgroundColor = "#fff";
-      button.style.color = "#ad4c4c";
-      button.style.border = "1px solid #ad4c4c";
-      button.innerText = "Add to Cart";
+      //adding the food items and cost to the menu-list
+      purchase(foodItem[i], foodCost[i]);
+    } else if (clickAnchor[i].innerText === "Remove") {
+      clickAnchor[i].style.backgroundColor = "#fff";
+      clickAnchor[i].style.color = "#ad4c4c";
+      clickAnchor[i].style.border = "1px solid #ad4c4c";
+      clickAnchor[i].innerText = "Add to Cart";
       notifyCount--;
       notify.innerText = notifyCount;
+     //passing the index of the selected item to the HTMLCollection to be removed.
+      purchaseMade[removePurchase(foodItem[i])].remove();
+      
     }
     if (notifyCount <= 0) {
       notify.style.display = `none`;
     }
   });
 }
-
 let openCheckout = false;
 cart.addEventListener("click", function () {
-  checkout.style.display = `inline-block`;
+  checkoutBox.style.display = `inline-block`;
   //{add state variable}
 });
