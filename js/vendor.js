@@ -6,7 +6,6 @@ const checkout = document.querySelector(".checkout");
 const purchaseMade = document.getElementsByClassName("purchase");
 const foodItem = document.querySelectorAll(".food-item");
 const foodCost = document.querySelectorAll(".food-cost");
-//const total = document.querySelector(".total-box")
 const result = document.querySelector(".total-result");
 let notifyCount = 0;
 
@@ -30,6 +29,17 @@ const removePurchase = function (foodItem) {
   });
   //returns the food item selected to be removed
   return selectedItem;
+};
+
+//TO GET THE TOTAL COST OF THE ITEMS
+const totalCost = function () {
+  const costArray = [...purchaseMade];
+  const reformed = costArray
+    .map((ele) => Number(ele.lastElementChild.innerText.slice(1).replace(",",""))).reduce((acc, ele) =>{
+      acc += ele;
+      return acc;
+    },0 ).toLocaleString();
+ return result.innerText = `#${reformed}`
 };
 
 //ADDING FOR THE MENU LIST
@@ -59,6 +69,8 @@ for (
       notify.innerText = notifyCount;
       //adding the food items and cost to the menu-list
       purchase(foodItem[i], foodCost[i]);
+      //total
+      totalCost();
     } else if (clickAnchor[i].innerText === "Remove") {
       clickAnchor[i].style.backgroundColor = "#fff";
       clickAnchor[i].style.color = "#ad4c4c";
@@ -68,6 +80,8 @@ for (
       notify.innerText = notifyCount;
       //passing the index of the selected item to the HTMLCollection to be removed.
       purchaseMade[removePurchase(foodItem[i])].remove();
+      //total
+      totalCost();
     }
     if (notifyCount <= 0) {
       notify.style.display = `none`;
