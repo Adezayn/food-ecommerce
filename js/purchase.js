@@ -17,6 +17,8 @@ const close = document.getElementsByClassName("close");
 const addIcon = document.getElementsByClassName("plus");
 const minusIcon = document.getElementsByClassName("minus");
 const countSpan = document.getElementsByClassName("count");
+const cartCost = document.getElementsByClassName("cost");
+
 let notifyCount = 0;
 let spanCount = 1;
 
@@ -65,6 +67,27 @@ const appearMenu = function (check = false) {
     checkoutBox.style.display = `none`;
   }
   return check;
+};
+
+const cartCostToNum = function () {
+  const cost = [...cartCost];
+  const reformedCost = cost.map((ele) => {
+    return Number(ele.innerText.slice(1).replace(",", ""));
+  });
+  return reformedCost;
+};
+const cartCostIncrease = function (index) {
+  const cost = [...cartCost];
+  const theCost = cartCostToNum(index);
+  let eachCost = theCost[index];
+  eachCost += eachCost;
+  return (cost[index].innerText = `#${eachCost.toLocaleString()}`);
+};
+const cartCostDecrease = function (index) {
+  const cost = [...cartCost];
+  const theCost = cartCostToNum(index);
+  let eachCost = theCost[index];
+  return (cost[index].innerText = `#${eachCost.toLocaleString()}`);
 };
 
 //GET ORDERED ITEMS TO THE CART PAGE
@@ -144,7 +167,6 @@ for (
       purchaseMade[removePurchase(foodItem[i])].remove();
       //total
       totalCost();
-      //allOrderedItems();
     }
     if (notifyCount <= 0) {
       notify.style.display = `none`;
@@ -179,29 +201,33 @@ toCartPage.addEventListener("click", function () {
     });
   }
 
-  //INCREASING AND DECREASING ORDER 
+  //INCREASING AND DECREASING ORDER
   let addItems = [...addIcon];
   let minusItems = [...minusIcon];
+
   for (const [index, add] of addItems.entries()) {
+    let countNumber = spanCount;
     add.addEventListener("click", function () {
-      if (spanCount < 10) {
-        spanCount++;
-        countSpan[index].innerText = spanCount;
+      if (countNumber < 10) {
+      countNumber++;
+        countSpan[index].innerText = countNumber;
         add.style.cursor = `pointer`;
-      }
-      else{
+       cartCostIncrease(index);
+      } else {
         add.style.cursor = `auto`;
       }
     });
   }
   for (const [index, minus] of minusItems.entries()) {
+    let countNumber = spanCount;
     minus.addEventListener("click", function () {
-      if (spanCount > 1) {
-        spanCount--;
-        countSpan[index].innerText = spanCount;
-        add.style.cursor = `pointer`;
-      }else{
-        add.style.cursor = `auto`;
+      if (countNumber > 1) {
+        countNumber--;
+        countSpan[index].innerText = countNumber;
+        minus.style.cursor = `pointer`;
+       // cartCostDecrease(index);
+      } else {
+        minus.style.cursor = `auto`;
       }
     });
   }
