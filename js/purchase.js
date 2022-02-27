@@ -169,10 +169,8 @@ toCartPage.addEventListener("click", function () {
 
   //DELETE ICON ON CART PAGE
   let closeItems = [...close];
-  let ordersCart = [...selectedOrders]
-  console.log(closeItems, ordersCart, selectedOrders);
+  let ordersCart = [...selectedOrders];
   for (const [index, icon] of closeItems.entries()){
-    console.log(index, icon);
     icon.addEventListener("click", function () {
       console.log( ordersCart[index]);
       ordersCart[index].remove();

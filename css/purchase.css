@@ -231,6 +231,9 @@ hr {
   align-items: center;
   gap: 2rem;
 }
+.delivery-man img{
+ margin: 0 ;
+}
 .order-name, .delivery-p{
   margin-bottom: .5rem;
   font-weight: 700;
@@ -293,6 +296,16 @@ hr {
   .bottom-view {
     display: block;
   }
+  .item,
+.delivery-man, .selected-orders {
+  flex-direction: column;
+}
+.selected-orders{
+  gap: 5rem;
+}
+.cost{
+  font-size: 2.5rem;
+}
 }
 @media (max-width: 375px) {
   header {
@@ -306,5 +319,8 @@ hr {
   .price {
     flex-direction: column;
     align-items: flex-start;
+  }
+  .c-img{
+    width: 25rem;
   }
 }
