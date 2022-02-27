@@ -166,4 +166,16 @@ toCartPage.addEventListener("click", function () {
   cartPage.style.display = `block`;
   cart.setAttribute("id", "this_cart");
   allOrderedItems();
+
+  //DELETE ICON ON CART PAGE
+  let closeItems = [...close];
+  let ordersCart = [...selectedOrders]
+  console.log(closeItems, ordersCart, selectedOrders);
+  for (const [index, icon] of closeItems.entries()){
+    console.log(index, icon);
+    icon.addEventListener("click", function () {
+      console.log( ordersCart[index]);
+      ordersCart[index].remove();
+    });
+  }
 });
