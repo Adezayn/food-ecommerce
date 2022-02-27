@@ -1,13 +1,21 @@
 const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
+const ordered = document.querySelectorAll(".order");
 const checkoutBox = document.querySelector(".checkout-box");
 const checkout = document.querySelector(".checkout");
 const purchaseMade = document.getElementsByClassName("purchase");
 const foodItem = document.querySelectorAll(".food-item");
 const foodCost = document.querySelectorAll(".food-cost");
 const result = document.querySelector(".total-result");
+const vendorPage = document.querySelector(".vendor-only");
+const toCartPage = document.querySelector(".cart-out");
+const cartPage = document.querySelector(".cart-only");
+const cartOrderContainer = document.querySelector(".cart-orders");
+const selectedOrders = document.getElementsByClassName("selected-orders");
+const close = document.getElementsByClassName("close");
 let notifyCount = 0;
+let spanCount = 1;
 
 ////////FUNCTIONS FOR FEATURES
 //TO ADD PURCHASES TO THE MENU LIST
@@ -35,11 +43,15 @@ const removePurchase = function (foodItem) {
 const totalCost = function () {
   const costArray = [...purchaseMade];
   const reformed = costArray
-    .map((ele) => Number(ele.lastElementChild.innerText.slice(1).replace(",",""))).reduce((acc, ele) =>{
+    .map((ele) =>
+      Number(ele.lastElementChild.innerText.slice(1).replace(",", ""))
+    )
+    .reduce((acc, ele) => {
       acc += ele;
       return acc;
-    },0 ).toLocaleString();
- return result.innerText = `#${reformed}`
+    }, 0)
+    .toLocaleString();
+  return (result.innerText = `#${reformed}`);
 };
 
 //ADDING FOR THE MENU LIST
@@ -52,6 +64,53 @@ const appearMenu = function (check = false) {
   return check;
 };
 
+//GET ORDERED ITEMS TO THE CART PAGE
+const allOrderedItems = function () {
+  const totalArray = [...purchaseMade];
+  const totalOrders = [...ordered];
+  const getNames = totalArray.map((ele) => ele.firstElementChild.innerText);
+  const getSrc = getNames.flatMap((ele) => {
+    const srcValues = totalOrders
+      .filter((order) => {
+        let orderNames = order.children[1].children[0].innerText;
+        if (ele === orderNames) {
+          return order;
+        }
+      })
+      .map((order) => {
+        return order;
+      });
+    return srcValues;
+  });
+
+  getSrc.forEach((path) => {
+    let orderImg = path.children[0].attributes.src.textContent;
+    let orderName = path.children[1].children[0].innerText;
+    let orderPrice = path.children[1].children[1].innerText;
+
+    const html = ` <div class="selected-orders">
+    <div class="item">
+      <img src="../assets/close.svg" alt="close" class="close">
+      <img src="${orderImg}" class="c-img">
+      <div class="counter-info">
+        <p class="order-name">${orderName}</p>
+        <div class="counter">
+          <img src="/assets/plus.svg" alt="plus" class="plus">
+          <span class="count">${spanCount}</span>
+          <img src="/assets/Minus.svg" alt="minus" class="minus">
+        </div>
+      </div>
+    </div>
+    <div class="cost">${orderPrice}</div>
+    </div>
+    `;
+
+    cartOrderContainer.insertAdjacentHTML("afterbegin", html);
+  });
+};
+
+//----------------------------EVENTLISTENERS---------------------------//
+//VENDOR PAGE AND MENU LIST
 for (
   let i = 0;
   i < clickAnchor.length, i < foodItem.length, i < foodCost.length;
@@ -82,6 +141,7 @@ for (
       purchaseMade[removePurchase(foodItem[i])].remove();
       //total
       totalCost();
+      //allOrderedItems();
     }
     if (notifyCount <= 0) {
       notify.style.display = `none`;
@@ -89,9 +149,21 @@ for (
     }
   });
 }
+
+//OPENING AND CLOSING OF MENU LIST
 let openCheckout = false;
 cart.addEventListener("click", function () {
   //{add state variable}
   appearMenu(!openCheckout);
   openCheckout = !openCheckout;
+});
+
+//CART PAGE
+toCartPage.addEventListener("click", function () {
+  vendorPage.style.display = `none`;
+  checkoutBox.style.display = `none`;
+  notify.style.display = `none`;
+  cartPage.style.display = `block`;
+  cart.setAttribute("id", "this_cart");
+  allOrderedItems();
 });
