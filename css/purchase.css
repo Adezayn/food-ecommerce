@@ -218,17 +218,26 @@ hr {
   color: #ad4c4c;
   font-weight: 500;
 }
-.selected-orders {
+.selected-orders, .delivery {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #c9c9c9;
   padding: 2rem 0;
 }
 .item,
-.delivery {
+.delivery-man {
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+.order-name, .delivery-p{
+  margin-bottom: .5rem;
+  font-weight: 700;
+}
+.cost{
+  font-size: 2rem;
+  font-weight: 500;
 }
 .close,
 .minus,
