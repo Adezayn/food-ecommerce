@@ -14,6 +14,9 @@ const cartPage = document.querySelector(".cart-only");
 const cartOrderContainer = document.querySelector(".cart-orders");
 const selectedOrders = document.getElementsByClassName("selected-orders");
 const close = document.getElementsByClassName("close");
+const addIcon = document.getElementsByClassName("plus");
+const minusIcon = document.getElementsByClassName("minus");
+const countSpan = document.getElementsByClassName("count");
 let notifyCount = 0;
 let spanCount = 1;
 
@@ -170,10 +173,36 @@ toCartPage.addEventListener("click", function () {
   //DELETE ICON ON CART PAGE
   let closeItems = [...close];
   let ordersCart = [...selectedOrders];
-  for (const [index, icon] of closeItems.entries()){
+  for (const [index, icon] of closeItems.entries()) {
     icon.addEventListener("click", function () {
-      console.log( ordersCart[index]);
       ordersCart[index].remove();
+    });
+  }
+
+  //INCREASING AND DECREASING ORDER 
+  let addItems = [...addIcon];
+  let minusItems = [...minusIcon];
+  for (const [index, add] of addItems.entries()) {
+    add.addEventListener("click", function () {
+      if (spanCount < 10) {
+        spanCount++;
+        countSpan[index].innerText = spanCount;
+        add.style.cursor = `pointer`;
+      }
+      else{
+        add.style.cursor = `auto`;
+      }
+    });
+  }
+  for (const [index, minus] of minusItems.entries()) {
+    minus.addEventListener("click", function () {
+      if (spanCount > 1) {
+        spanCount--;
+        countSpan[index].innerText = spanCount;
+        add.style.cursor = `pointer`;
+      }else{
+        add.style.cursor = `auto`;
+      }
     });
   }
 });
