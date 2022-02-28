@@ -21,7 +21,6 @@ const cartCost = document.getElementsByClassName("cost");
 const finalCost = document.querySelector(".total-cost");
 
 let notifyCount = 0;
-//let spanCount = 1;
 
 ////////FUNCTIONS FOR FEATURES
 //TO ADD PURCHASES TO THE MENU LIST
@@ -61,6 +60,7 @@ const totalCost = function () {
   return (result.innerText = `#${reformed}`);
 };
 
+//TO GET THE FINAL TOTAL COST OF ALL ITEMS
 const totalFinal = function (cost) {
   const reformed = cost
     .map((ele) => {
@@ -85,6 +85,7 @@ const appearMenu = function (check = false) {
   return check;
 };
 
+//TO CONVERT MONEY STRING TO NUMBER
 const cartCostToNum = function () {
   const cost = [...cartCost];
   const reformedCost = cost.map((ele) => {
@@ -195,23 +196,24 @@ toCartPage.addEventListener("click", function () {
   cart.setAttribute("id", "this_cart");
   allOrderedItems();
 
-  //DELETE ICON ON CART PAGE
   let closeItems = [...close];
   let ordersCart = [...selectedOrders];
+  //DELETE ICON ON CART PAGE
   for (const [index, icon] of closeItems.entries()) {
     icon.addEventListener("click", function () {
       ordersCart[index].remove();
+      const costRemove = [...cartCost];
+      //Removal of ordered items from the final cost
+      totalFinal(costRemove);
     });
   }
 
-  //INCREASING AND DECREASING ORDER
   let addItems = [...addIcon];
   let minusItems = [...minusIcon];
   let counting = [...countSpan];
-
   const cost = [...cartCost];
   const theCost = cartCostToNum();
-
+  //INCREASING AND DECREASING ORDER
   for (
     let i = 0;
     i < counting.length, i < addItems.length, i < minusItems.length;
@@ -221,6 +223,7 @@ toCartPage.addEventListener("click", function () {
     let spanCount = 1;
     let eachCost;
     totalFinal(cost);
+    // INCREASE NUMBER OF ITEMS AND COST
     addItems[i].addEventListener("click", function () {
       if (spanCount < 10) {
         spanCount++;
@@ -229,12 +232,11 @@ toCartPage.addEventListener("click", function () {
         eachCost = defaultCost * spanCount;
         cost[i].innerText = `#${eachCost.toLocaleString()}`;
         totalFinal(cost);
-
       } else {
         addItems[i].style.cursor = `auto`;
       }
     });
-
+ // DECREASE NUMBER OF ITEMS AND COST
     minusItems[i].addEventListener("click", function () {
       if (spanCount > 1) {
         spanCount--;
@@ -247,6 +249,5 @@ toCartPage.addEventListener("click", function () {
         minusItems[i].style.cursor = `auto`;
       }
     });
-   
   }
 });
