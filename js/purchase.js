@@ -20,7 +20,7 @@ const countSpan = document.getElementsByClassName("count");
 const cartCost = document.getElementsByClassName("cost");
 
 let notifyCount = 0;
-let spanCount = 1;
+//let spanCount = 1;
 
 ////////FUNCTIONS FOR FEATURES
 //TO ADD PURCHASES TO THE MENU LIST
@@ -76,19 +76,6 @@ const cartCostToNum = function () {
   });
   return reformedCost;
 };
-const cartCostIncrease = function (index) {
-  const cost = [...cartCost];
-  const theCost = cartCostToNum(index);
-  let eachCost = theCost[index];
-  eachCost += eachCost;
-  return (cost[index].innerText = `#${eachCost.toLocaleString()}`);
-};
-const cartCostDecrease = function (index) {
-  const cost = [...cartCost];
-  const theCost = cartCostToNum(index);
-  let eachCost = theCost[index];
-  return (cost[index].innerText = `#${eachCost.toLocaleString()}`);
-};
 
 //GET ORDERED ITEMS TO THE CART PAGE
 const allOrderedItems = function () {
@@ -122,7 +109,7 @@ const allOrderedItems = function () {
         <p class="order-name">${orderName}</p>
         <div class="counter">
           <img src="/assets/plus.svg" alt="plus" class="plus">
-          <span class="count">${spanCount}</span>
+          <span class="count">${Number(1)}</span>
           <img src="/assets/Minus.svg" alt="minus" class="minus">
         </div>
       </div>
@@ -204,30 +191,40 @@ toCartPage.addEventListener("click", function () {
   //INCREASING AND DECREASING ORDER
   let addItems = [...addIcon];
   let minusItems = [...minusIcon];
+  let counting = [...countSpan];
 
-  for (const [index, add] of addItems.entries()) {
-    let countNumber = spanCount;
-    add.addEventListener("click", function () {
-      if (countNumber < 10) {
-      countNumber++;
-        countSpan[index].innerText = countNumber;
-        add.style.cursor = `pointer`;
-       cartCostIncrease(index);
+  const cost = [...cartCost];
+  const theCost = cartCostToNum();
+
+  for (
+    let i = 0;
+    i < counting.length, i < addItems.length, i < minusItems.length;
+    i++
+  ) {
+    let defaultCost = theCost[i];
+    let spanCount = 1;
+    let eachCost;
+    addItems[i].addEventListener("click", function () {
+      if (spanCount < 10) {
+        spanCount++;
+        counting[i].innerText = spanCount;
+        addItems[i].style.cursor = `pointer`;
+        eachCost = defaultCost * spanCount;
+        return (cost[i].innerText = `#${eachCost.toLocaleString()}`);
       } else {
-        add.style.cursor = `auto`;
+        addItems[i].style.cursor = `auto`;
       }
     });
-  }
-  for (const [index, minus] of minusItems.entries()) {
-    let countNumber = spanCount;
-    minus.addEventListener("click", function () {
-      if (countNumber > 1) {
-        countNumber--;
-        countSpan[index].innerText = countNumber;
-        minus.style.cursor = `pointer`;
-       // cartCostDecrease(index);
+
+    minusItems[i].addEventListener("click", function () {
+      if (spanCount > 1) {
+        spanCount--;
+        counting[i].innerText = spanCount;
+        minusItems[i].style.cursor = `pointer`;
+        eachCost = eachCost - defaultCost;
+        return (cost[i].innerText = `#${eachCost.toLocaleString()}`);
       } else {
-        minus.style.cursor = `auto`;
+        minusItems[i].style.cursor = `auto`;
       }
     });
   }

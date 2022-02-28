@@ -65,6 +65,7 @@ nav > a:last-child {
 .cart {
   position: relative;
   height: fit-content;
+  cursor: pointer;
 }
 .notification {
   position: absolute;
@@ -128,6 +129,8 @@ nav > a:last-child {
   font-weight: 700;
   background-color: #fff;
   padding: 5px;
+  border:none;
+  box-shadow: inset;
 }
 /** End of styling of the Header section **/
 
