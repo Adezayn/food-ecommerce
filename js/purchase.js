@@ -18,6 +18,7 @@ const addIcon = document.getElementsByClassName("plus");
 const minusIcon = document.getElementsByClassName("minus");
 const countSpan = document.getElementsByClassName("count");
 const cartCost = document.getElementsByClassName("cost");
+const finalCost = document.querySelector(".total-cost");
 
 let notifyCount = 0;
 //let spanCount = 1;
@@ -44,6 +45,7 @@ const removePurchase = function (foodItem) {
   return selectedItem;
 };
 
+////------------------------------------TOTAL-----------------------////
 //TO GET THE TOTAL COST OF THE ITEMS
 const totalCost = function () {
   const costArray = [...purchaseMade];
@@ -58,6 +60,20 @@ const totalCost = function () {
     .toLocaleString();
   return (result.innerText = `#${reformed}`);
 };
+
+const totalFinal = function (cost) {
+  const reformed = cost
+    .map((ele) => {
+      return Number(ele.innerText.slice(1).replace(",", ""));
+    })
+    .reduce((acc, ele) => {
+      acc += ele;
+      return acc;
+    }, 0)
+    .toLocaleString();
+  return (finalCost.innerText = `#${reformed}`);
+};
+//////-------------------------------------------------//////////////////
 
 //ADDING FOR THE MENU LIST
 const appearMenu = function (check = false) {
@@ -204,13 +220,16 @@ toCartPage.addEventListener("click", function () {
     let defaultCost = theCost[i];
     let spanCount = 1;
     let eachCost;
+    totalFinal(cost);
     addItems[i].addEventListener("click", function () {
       if (spanCount < 10) {
         spanCount++;
         counting[i].innerText = spanCount;
         addItems[i].style.cursor = `pointer`;
         eachCost = defaultCost * spanCount;
-        return (cost[i].innerText = `#${eachCost.toLocaleString()}`);
+        cost[i].innerText = `#${eachCost.toLocaleString()}`;
+        totalFinal(cost);
+
       } else {
         addItems[i].style.cursor = `auto`;
       }
@@ -222,10 +241,12 @@ toCartPage.addEventListener("click", function () {
         counting[i].innerText = spanCount;
         minusItems[i].style.cursor = `pointer`;
         eachCost = eachCost - defaultCost;
-        return (cost[i].innerText = `#${eachCost.toLocaleString()}`);
+        cost[i].innerText = `#${eachCost.toLocaleString()}`;
+        totalFinal(cost);
       } else {
         minusItems[i].style.cursor = `auto`;
       }
     });
+   
   }
 });
