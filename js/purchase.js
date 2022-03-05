@@ -113,30 +113,12 @@ const allOrderedItems = function () {
     return srcValues;
   });
 
+let allOutPath = []
   getSrc.forEach((path) => {
-    let orderImg = path.children[0].attributes.src.textContent;
-    let orderName = path.children[1].children[0].innerText;
-    let orderPrice = path.children[1].children[1].innerText;
-
-    const html = ` <div class="selected-orders">
-    <div class="item">
-      <img src="../assets/close.svg" alt="close" class="close">
-      <img src="${orderImg}" class="c-img">
-      <div class="counter-info">
-        <p class="order-name">${orderName}</p>
-        <div class="counter">
-          <img src="/assets/plus.svg" alt="plus" class="plus">
-          <span class="count">${Number(1)}</span>
-          <img src="/assets/Minus.svg" alt="minus" class="minus">
-        </div>
-      </div>
-    </div>
-    <div class="cost">${orderPrice}</div>
-    </div>
-    `;
-
-    cartOrderContainer.insertAdjacentHTML("afterbegin", html);
+    let outPath = path.outerHTML;
+    allOutPath.push(outPath)
   });
+ localStorage.setItem("orders", JSON.stringify(allOutPath))
 };
 
 //----------------------------EVENTLISTENERS---------------------------//
@@ -189,65 +171,7 @@ cart.addEventListener("click", function () {
 
 //CART PAGE
 toCartPage.addEventListener("click", function () {
-  vendorPage.style.display = `none`;
-  checkoutBox.style.display = `none`;
-  notify.style.display = `none`;
-  cartPage.style.display = `block`;
-  cart.setAttribute("id", "this_cart");
   allOrderedItems();
+  location.href = `/html/cart.html`
 
-  let closeItems = [...close];
-  let ordersCart = [...selectedOrders];
-  //DELETE ICON ON CART PAGE
-  for (const [index, icon] of closeItems.entries()) {
-    icon.addEventListener("click", function () {
-      ordersCart[index].remove();
-      const costRemove = [...cartCost];
-      //Removal of ordered items from the final cost
-      totalFinal(costRemove);
-    });
-  }
-
-  let addItems = [...addIcon];
-  let minusItems = [...minusIcon];
-  let counting = [...countSpan];
-  const cost = [...cartCost];
-  const theCost = cartCostToNum();
-  //INCREASING AND DECREASING ORDER
-  for (
-    let i = 0;
-    i < counting.length, i < addItems.length, i < minusItems.length;
-    i++
-  ) {
-    let defaultCost = theCost[i];
-    let spanCount = 1;
-    let eachCost;
-    totalFinal(cost);
-    // INCREASE NUMBER OF ITEMS AND COST
-    addItems[i].addEventListener("click", function () {
-      if (spanCount < 10) {
-        spanCount++;
-        counting[i].innerText = spanCount;
-        addItems[i].style.cursor = `pointer`;
-        eachCost = defaultCost * spanCount;
-        cost[i].innerText = `#${eachCost.toLocaleString()}`;
-        totalFinal(cost);
-      } else {
-        addItems[i].style.cursor = `auto`;
-      }
-    });
- // DECREASE NUMBER OF ITEMS AND COST
-    minusItems[i].addEventListener("click", function () {
-      if (spanCount > 1) {
-        spanCount--;
-        counting[i].innerText = spanCount;
-        minusItems[i].style.cursor = `pointer`;
-        eachCost = eachCost - defaultCost;
-        cost[i].innerText = `#${eachCost.toLocaleString()}`;
-        totalFinal(cost);
-      } else {
-        minusItems[i].style.cursor = `auto`;
-      }
-    });
-  }
 });

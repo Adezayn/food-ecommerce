@@ -14,6 +14,7 @@ body {
   font-size: 1.6rem;
   color: #4e4d4d;
 }
+
 .container {
   padding: 50px;
 }
@@ -214,9 +215,7 @@ hr {
   margin: 61px 0 66px;
 }
 /*------------------------------------CART PAGE--------------------------------------------*/
-.cart-only {
-  display: none;
-}
+
 #this_cart {
   color: #ad4c4c;
   font-weight: 500;
