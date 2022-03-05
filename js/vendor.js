@@ -10,15 +10,6 @@ const foodCost = document.querySelectorAll(".food-cost");
 const result = document.querySelector(".total-result");
 const vendorPage = document.querySelector(".vendor-only");
 const toCartPage = document.querySelector(".cart-out");
-const cartPage = document.querySelector(".cart-only");
-const cartOrderContainer = document.querySelector(".cart-orders");
-const selectedOrders = document.getElementsByClassName("selected-orders");
-const close = document.getElementsByClassName("close");
-const addIcon = document.getElementsByClassName("plus");
-const minusIcon = document.getElementsByClassName("minus");
-const countSpan = document.getElementsByClassName("count");
-const cartCost = document.getElementsByClassName("cost");
-const finalCost = document.querySelector(".total-cost");
 
 let notifyCount = 0;
 
