@@ -39,9 +39,6 @@ convertHTML.forEach((path) => {
   cartOrderContainer.insertAdjacentHTML("afterbegin", html);
 });
 
-console.log(selectedOrders, close, cartCost);
-
-
 //-----------------FUNCTIONS------------------//
 //TO GET THE FINAL TOTAL COST OF ALL ITEMS
 const totalFinal = function (cost) {
@@ -65,7 +62,7 @@ const cartCostToNum = function () {
   });
   return reformedCost;
 };
-
+let cost = [...cartCost];
 //---------------DELETE ICON ON CART PAGE------------//
 let closeItems = [...close];
 let ordersCart = [...selectedOrders];
@@ -75,6 +72,12 @@ for (const [index, icon] of closeItems.entries()) {
     const costRemove = [...cartCost];
     //Removal of ordered items from the final cost
     totalFinal(costRemove);
+    cost = [...cartCost];
+    
+//---CLOSE CART PAGE WHEN ALL ORDERED ITEM ARE DELETED---//
+    if (cost.length < 2){
+        location.href = `/html/vendor.html`;
+    }
   });
 }
 
@@ -82,7 +85,6 @@ for (const [index, icon] of closeItems.entries()) {
 let addItems = [...addIcon];
 let minusItems = [...minusIcon];
 let counting = [...countSpan];
-const cost = [...cartCost];
 const theCost = cartCostToNum();
 
 for (
