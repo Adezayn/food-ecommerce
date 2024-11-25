@@ -1,3 +1,4 @@
+const allMealCategory = `https://www.themealdb.com/api/json/v1/1/categories.php`;
 const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
@@ -10,6 +11,50 @@ const foodCost = document.querySelectorAll(".food-cost");
 const result = document.querySelector(".total-result");
 const vendorPage = document.querySelector(".vendor-only");
 const toCartPage = document.querySelector(".cart-out");
+const apiListDom = document.querySelector(".api-list");
+
+
+const renderApiMealList = (categories) => {
+ categories.forEach(meal => {
+   //   console.log(meal, "in render api meal list");
+      const {
+        strMeal,
+        strMealThumb,
+        idCategory,
+        strCategory,
+        strCategoryThumb,
+      } = meal;
+
+   const newDiv = document.createElement("div");
+   newDiv.setAttribute("class", "order");
+
+   const newImg = document.createElement("img");
+   newImg.setAttribute("src", `${strCategoryThumb}`);
+   newDiv.appendChild(newImg);
+
+   const newFoodItemParagraph = document.createElement("p");
+   newFoodItemParagraph.setAttribute("class", "food-item");
+   newFoodItemParagraph.textContent = `${strCategory}`;
+
+   const newFoodCostParagraph = document.createElement("p");
+   newFoodCostParagraph.setAttribute("class", "food-cost");
+   newFoodCostParagraph.textContent = `#${2000}`;
+
+   const newPriceDiv = document.createElement("div");
+   newPriceDiv.setAttribute("class", "price");
+   newPriceDiv.appendChild(newFoodItemParagraph);
+   newPriceDiv.appendChild(newFoodCostParagraph);
+   newDiv.appendChild(newPriceDiv);
+
+   const newButton = document.createElement("button")
+   newButton.setAttribute("class", "button");
+   newButton.textContent = "Add to Cart";
+   newDiv.appendChild(newButton)
+
+  apiListDom.appendChild(newDiv);
+  })
+  console.log(apiListDom, "=apidom 5=", clickAnchor);
+};
 
 let notifyCount = 0;
 
@@ -104,12 +149,12 @@ const allOrderedItems = function () {
     return srcValues;
   });
 
-let allOutPath = []
+  let allOutPath = [];
   getSrc.forEach((path) => {
     let outPath = path.outerHTML;
-    allOutPath.push(outPath)
+    allOutPath.push(outPath);
   });
- localStorage.setItem("orders", JSON.stringify(allOutPath))
+  localStorage.setItem("orders", JSON.stringify(allOutPath));
 };
 
 //----------------------------EVENTLISTENERS---------------------------//
@@ -152,6 +197,18 @@ for (
   });
 }
 
+const fetchMealCategoriesOnLoad = async () => {
+  console.log("triggered");
+  try {
+    const response = await fetch(allMealCategory);
+    const data = await response.json();
+   // console.log(response, "===DATA==", data);
+    const categories = data?.categories
+    renderApiMealList(categories);
+  } catch (e) {}
+};
+fetchMealCategoriesOnLoad();
+
 //OPENING AND CLOSING OF MENU LIST
 let openCheckout = false;
 cart.addEventListener("click", function () {
@@ -163,6 +220,5 @@ cart.addEventListener("click", function () {
 //CART PAGE
 toCartPage.addEventListener("click", function () {
   allOrderedItems();
-  location.href = `/html/cart.html`
-
+  location.href = `/html/cart.html`;
 });
