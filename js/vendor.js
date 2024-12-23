@@ -1,66 +1,95 @@
 const allMealCategory = `https://www.themealdb.com/api/json/v1/1/categories.php`;
-const clickAnchor = document.querySelectorAll(".button");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
-const ordered = document.querySelectorAll(".order");
 const checkoutBox = document.querySelector(".checkout-box");
 const checkout = document.querySelector(".checkout");
-const purchaseMade = document.getElementsByClassName("purchase");
-const foodItem = document.querySelectorAll(".food-item");
-const foodCost = document.querySelectorAll(".food-cost");
 const result = document.querySelector(".total-result");
 const vendorPage = document.querySelector(".vendor-only");
 const toCartPage = document.querySelector(".cart-out");
 const apiListDom = document.querySelector(".api-list");
+let notifyCount = 0;
 
-
-const renderApiMealList = (categories) => {
- categories.forEach(meal => {
-   //   console.log(meal, "in render api meal list");
-      const {
-        strMeal,
-        strMealThumb,
-        idCategory,
-        strCategory,
-        strCategoryThumb,
-      } = meal;
-
-   const newDiv = document.createElement("div");
-   newDiv.setAttribute("class", "order");
-
-   const newImg = document.createElement("img");
-   newImg.setAttribute("src", `${strCategoryThumb}`);
-   newDiv.appendChild(newImg);
-
-   const newFoodItemParagraph = document.createElement("p");
-   newFoodItemParagraph.setAttribute("class", "food-item");
-   newFoodItemParagraph.textContent = `${strCategory}`;
-
-   const newFoodCostParagraph = document.createElement("p");
-   newFoodCostParagraph.setAttribute("class", "food-cost");
-   newFoodCostParagraph.textContent = `#${2000}`;
-
-   const newPriceDiv = document.createElement("div");
-   newPriceDiv.setAttribute("class", "price");
-   newPriceDiv.appendChild(newFoodItemParagraph);
-   newPriceDiv.appendChild(newFoodCostParagraph);
-   newDiv.appendChild(newPriceDiv);
-
-   const newButton = document.createElement("button")
-   newButton.setAttribute("class", "button");
-   newButton.textContent = "Add to Cart";
-   newDiv.appendChild(newButton)
-
-  apiListDom.appendChild(newDiv);
-  })
-  console.log(apiListDom, "=apidom 5=", clickAnchor);
+const addDynamicButtonListeners = () => {
+  const buttons = document.querySelectorAll(".button"); // Select all buttons, including newly added ones
+  const foodItem = document.querySelectorAll(".food-item");
+  const foodCost = document.querySelectorAll(".food-cost");
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", function () {
+      if (button.innerText === "Add to Cart") {
+        button.style.backgroundColor = "#A5A5A5";
+        button.style.color = "rgba(255, 255, 255, 1)";
+        button.style.border = "none";
+        button.innerHTML =
+          '<img src = "../assets/remove.svg" class = "remove"/>Remove';
+        notify.style.display = `inline-block`;
+        notifyCount++;
+        notify.innerText = notifyCount;
+        // Add the food items and cost to the menu-list
+        purchase(foodItem[index], foodCost[index]);
+        // Update total cost
+        totalCost();
+      } else if (button.innerText === "Remove") {
+        button.style.backgroundColor = "#fff";
+        button.style.color = "#ad4c4c";
+        button.style.border = "1px solid #ad4c4c";
+        button.innerText = "Add to Cart";
+        notifyCount--;
+        notify.innerText = notifyCount;
+        // Remove the selected item
+        purchaseMade[removePurchase(foodItem[index])].remove();
+        // Update total cost
+        totalCost();
+      }
+      if (notifyCount <= 0) {
+        notify.style.display = `none`;
+        checkoutBox.style.display = `none`;
+      }
+    });
+  });
 };
 
-let notifyCount = 0;
+const renderApiMealList = (categories) => {
+  categories.forEach((meal) => {
+    //   console.log(meal, "in render api meal list");
+    const { strMeal, strMealThumb, idCategory, strCategory, strCategoryThumb } =
+      meal;
+
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "order");
+
+    const newImg = document.createElement("img");
+    newImg.setAttribute("src", `${strCategoryThumb}`);
+    newDiv.appendChild(newImg);
+
+    const newFoodItemParagraph = document.createElement("p");
+    newFoodItemParagraph.setAttribute("class", "food-item");
+    newFoodItemParagraph.textContent = `${strCategory}`;
+
+    const newFoodCostParagraph = document.createElement("p");
+    newFoodCostParagraph.setAttribute("class", "food-cost");
+    newFoodCostParagraph.textContent = `#2,000`;
+
+    const newPriceDiv = document.createElement("div");
+    newPriceDiv.setAttribute("class", "price");
+    newPriceDiv.appendChild(newFoodItemParagraph);
+    newPriceDiv.appendChild(newFoodCostParagraph);
+    newDiv.appendChild(newPriceDiv);
+
+    const newButton = document.createElement("button");
+    newButton.setAttribute("class", "button");
+    newButton.textContent = "Add to Cart";
+    newDiv.appendChild(newButton);
+
+    apiListDom.appendChild(newDiv);
+  });
+  // Add event listeners to new buttons after rendering
+  addDynamicButtonListeners();
+};
 
 ////////FUNCTIONS FOR FEATURES
 //TO ADD PURCHASES TO THE MENU LIST
 const purchase = function (item, cost) {
+  console.log(item, "==item:cost==",cost)
   const html = `<div class="purchase">
   <div class="purchase-item">${item.textContent}</div>
   <div class="purchase-cost">${cost.textContent}</div>
@@ -132,6 +161,8 @@ const cartCostToNum = function () {
 
 //GET ORDERED ITEMS TO THE CART PAGE
 const allOrderedItems = function () {
+  const purchaseMade = document.getElementsByClassName("purchase");
+  const ordered = document.querySelectorAll(".order");
   const totalArray = [...purchaseMade];
   const totalOrders = [...ordered];
   const getNames = totalArray.map((ele) => ele.firstElementChild.innerText);
@@ -159,43 +190,6 @@ const allOrderedItems = function () {
 
 //----------------------------EVENTLISTENERS---------------------------//
 //VENDOR PAGE AND MENU LIST
-for (
-  let i = 0;
-  i < clickAnchor.length, i < foodItem.length, i < foodCost.length;
-  i++
-) {
-  clickAnchor[i].addEventListener("click", function () {
-    if (clickAnchor[i].innerText === "Add to Cart") {
-      clickAnchor[i].style.backgroundColor = "#A5A5A5";
-      clickAnchor[i].style.color = "rgba(255, 255, 255, 1)";
-      clickAnchor[i].style.border = "none";
-      clickAnchor[i].innerHTML =
-        '<img src = "../assets/remove.svg" class = "remove"/>Remove';
-      notify.style.display = `inline-block`;
-      notifyCount++;
-      notify.innerText = notifyCount;
-      //adding the food items and cost to the menu-list
-      purchase(foodItem[i], foodCost[i]);
-      //total
-      totalCost();
-    } else if (clickAnchor[i].innerText === "Remove") {
-      clickAnchor[i].style.backgroundColor = "#fff";
-      clickAnchor[i].style.color = "#ad4c4c";
-      clickAnchor[i].style.border = "1px solid #ad4c4c";
-      clickAnchor[i].innerText = "Add to Cart";
-      notifyCount--;
-      notify.innerText = notifyCount;
-      //passing the index of the selected item to the HTMLCollection to be removed.
-      purchaseMade[removePurchase(foodItem[i])].remove();
-      //total
-      totalCost();
-    }
-    if (notifyCount <= 0) {
-      notify.style.display = `none`;
-      checkoutBox.style.display = `none`;
-    }
-  });
-}
 
 const fetchMealCategoriesOnLoad = async () => {
   console.log("triggered");
@@ -205,7 +199,9 @@ const fetchMealCategoriesOnLoad = async () => {
    // console.log(response, "===DATA==", data);
     const categories = data?.categories
     renderApiMealList(categories);
-  } catch (e) {}
+  } catch (e) {
+    renderApiMealList([]);
+  }
 };
 fetchMealCategoriesOnLoad();
 

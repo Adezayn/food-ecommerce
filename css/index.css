@@ -157,31 +157,6 @@ footer > p{
   height: 30px;
   /* border-radius: 10px; */
 }
-
-.progress{
-    height: 100%;
-    border-radius: 10px;
-     /* background-image: repeating-linear-gradient(
-        135deg,
-        #3b82f6, /* Tailwind bg-blue-600 
-        #3b82f6 10px,
-        #e5e7eb 10px,
-        #e5e7eb 20px
-      ); */
-      background-color: #3b82f6;
-    color: "#fff";
-    animation: progressAnimation 10s linear forwards;
-}
-
-  @keyframes progressAnimation {
-      from {
-        width: 0; /* Start from 0% */
-      }
-      to {
-        width: 100%; /* End at 100% */
-        text-align: center;
-      }
-    }
 /** End of styling of the Footer section **/
 
 @media (max-width: 768px)  {

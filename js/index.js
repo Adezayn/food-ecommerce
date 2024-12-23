@@ -31,16 +31,3 @@ const domChanges = function () {
   }
 };
 selectedAddress.addEventListener("change", domChanges);
-
-let currentPercentage = 0; // Start at 0%
-
-const eachPercentage = () => {
-  if (currentPercentage < 100) {
-    currentPercentage += 10;
-    // }
-    progress.textContent = `${currentPercentage}%`; // Update the text
-  }else{
-    clearInterval(intervalId); 
-  }
-};
-setInterval(eachPercentage, 1000);
