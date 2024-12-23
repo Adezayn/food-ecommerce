@@ -89,19 +89,27 @@ main > p:nth-of-type(2){
 .options{
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 }
 .opt-item{
     width: 18.4375rem;
     box-shadow: 0 0 3px 1.5px rgba(0, 0, 0, 0.10);
     padding: 1.875rem;
+    cursor: pointer;
+}
+.item-img{
+     width: 100%;
+     align-self: center;
 }
 .opt-item p:nth-of-type(1){
     font-size: 1.125rem;
     font-weight: 500;
+    color: #AD4C4C;
 }
 .opt-item p:nth-of-type(2){
     margin-top: 0.3125rem;
     font-size: 0.875rem;
+    color: #696969;
 }
 /** End of styling of the Header section **/
 
@@ -144,6 +152,9 @@ footer > p{
     justify-content: center;
     gap: 1.875rem;
     margin-bottom: 3.125rem;
+}
+.social-icons img{
+    cursor: pointer;
 }
 .copyright{
     display: flex;

@@ -1,33 +1,62 @@
-// import { allMealCategory } from "./constants";
+const allMealCategory = `https://www.themealdb.com/api/json/v1/1/categories.php`;
 const selectedAddress = document.getElementById("address");
-const imgBox = document.querySelectorAll(".item-img");
-const imgParent = document.querySelectorAll(".opt-item");
-const span = document.querySelector(".span");
-const progress = document.querySelector(".progress")
+const optionsBox = document.querySelector(".options");
 
-const domChanges = function () {
-  for (let i = 0; i < imgBox.length, i < imgParent.length; i++) {
-    let imgSource = imgBox[i].attributes.src; //Getting the src attribute of the image selected
-    let sourceValue = imgSource.value; //Getting the value of the src
-    let mainImgParent = imgParent[i]; //Getting each parent box of all the parent boxes array
-    if (selectedAddress.value) {
-      imgSource.textContent = sourceValue.replace("_disabled", "");//Remove _disabled string from the src value
-      mainImgParent.children[1].style.color = `#AD4C4C`;
-      mainImgParent.children[2].style.color = `#696969`;
-      mainImgParent.style.cursor = `pointer`;
-      mainImgParent.onclick = () => location.href = `../html/vendor.html`;
-      span.textContent = "";
-    } else {
-      imgSource.textContent = sourceValue
-        .replace(".svg", "")
-        .concat(`_disabled.svg`);
-        mainImgParent.children[1].style.color= `#A5A5A5`;
-        mainImgParent.children[2].style.color = `#A5A5A5`;
-        mainImgParent.style.cursor = `auto`;
-      mainImgParent.onclick = () => location.href = ``;
-      span.textContent = "Select a location please";
-      span.style.color = `red`;
-    }
+ const domChanges = function () {
+   const imgParent = document.querySelectorAll(".opt-item");
+   for (let i = 0; i < imgParent.length; i++) {
+     let mainImgParent = imgParent[i]; //Getting each parent box of all the parent boxes array
+    //  if (selectedAddress.value) {
+       mainImgParent.onclick = function () {
+         // Store the text content of the clicked element
+         localStorage.setItem("categoryName", this.children[1].textContent);
+         localStorage.setItem(
+           "categoryImage",
+           this.children[0].getAttribute("src")
+         );
+         // Redirect to the vendor page
+         location.href = `../html/vendor.html`;
+       };
+    //  } 
+   }
+ };
+ 
+const fetchMealCategoriesOnLoad = async () => {
+  console.log("triggered fetchMealCategoriesOnLoad");
+  try {
+    const response = await fetch(allMealCategory);
+    const data = await response.json();
+    // console.log(response, "===DATA==", data);
+    const categories = data?.categories;
+    renderApiCategoryList(categories);
+  } catch (e) {
+    renderApiCategoryList([]);
   }
 };
-selectedAddress.addEventListener("change", domChanges);
+fetchMealCategoriesOnLoad();
+
+const renderApiCategoryList = (categories) => {
+  categories.forEach((meal) => {
+    const { strCategory, strCategoryThumb, strCategoryDescription } = meal;
+
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "opt-item");
+
+    const newImg = document.createElement("img");
+    newImg.setAttribute("class", "item-img");
+    newImg.setAttribute("src", `${strCategoryThumb}`);
+    newDiv.appendChild(newImg);
+
+    const categoryParagraph = document.createElement("p");
+    categoryParagraph.textContent = `${strCategory}`;
+
+    const descriptionParagraph = document.createElement("p");
+    descriptionParagraph.textContent = `${strCategoryDescription?.split(".")[0]}.`;
+
+    newDiv.appendChild(categoryParagraph);
+    newDiv.appendChild(descriptionParagraph);
+
+    optionsBox.appendChild(newDiv);
+    domChanges()
+  });
+};

@@ -177,6 +177,15 @@ p.navigate span:last-child {
   color: #000;
   font-size: 2rem;
 }
+.eatery-logo .api-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.api-list img {
+  width: 100%;
+}
 .list > div {
   width: 265px;
 }
@@ -232,6 +241,10 @@ hr {
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+.item .c-img{
+  max-width: 15rem;
+  width: 100%;
 }
 .delivery-man{
   width: 45rem;
@@ -329,6 +342,7 @@ hr {
     align-items: flex-start;
   }
   .c-img{
-    width: 25rem;
+    width: 100%;
+    object-fit: cover;
   }
 }

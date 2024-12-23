@@ -1,4 +1,8 @@
-const allMealCategory = `https://www.themealdb.com/api/json/v1/1/categories.php`;
+const categoryName = localStorage.getItem("categoryName");
+const categoryImage = localStorage.getItem("categoryImage");
+const mealsByCategory = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`;
+const apiName = document.querySelector(".api-name");
+const apiImage = document.querySelector(".api-img");
 const notify = document.querySelector(".notification");
 const cart = document.querySelector(".cart");
 const checkoutBox = document.querySelector(".checkout-box");
@@ -9,10 +13,13 @@ const toCartPage = document.querySelector(".cart-out");
 const apiListDom = document.querySelector(".api-list");
 let notifyCount = 0;
 
+apiName.textContent = categoryName;
+apiImage.setAttribute("src", categoryImage);
 const addDynamicButtonListeners = () => {
   const buttons = document.querySelectorAll(".button"); // Select all buttons, including newly added ones
   const foodItem = document.querySelectorAll(".food-item");
   const foodCost = document.querySelectorAll(".food-cost");
+  const purchaseMade = document.getElementsByClassName("purchase");
   buttons.forEach((button, index) => {
     button.addEventListener("click", function () {
       if (button.innerText === "Add to Cart") {
@@ -26,8 +33,6 @@ const addDynamicButtonListeners = () => {
         notify.innerText = notifyCount;
         // Add the food items and cost to the menu-list
         purchase(foodItem[index], foodCost[index]);
-        // Update total cost
-        totalCost();
       } else if (button.innerText === "Remove") {
         button.style.backgroundColor = "#fff";
         button.style.color = "#ad4c4c";
@@ -37,8 +42,6 @@ const addDynamicButtonListeners = () => {
         notify.innerText = notifyCount;
         // Remove the selected item
         purchaseMade[removePurchase(foodItem[index])].remove();
-        // Update total cost
-        totalCost();
       }
       if (notifyCount <= 0) {
         notify.style.display = `none`;
@@ -50,20 +53,18 @@ const addDynamicButtonListeners = () => {
 
 const renderApiMealList = (categories) => {
   categories.forEach((meal) => {
-    //   console.log(meal, "in render api meal list");
-    const { strMeal, strMealThumb, idCategory, strCategory, strCategoryThumb } =
-      meal;
+    const { strMeal, strMealThumb } = meal;
 
     const newDiv = document.createElement("div");
     newDiv.setAttribute("class", "order");
 
     const newImg = document.createElement("img");
-    newImg.setAttribute("src", `${strCategoryThumb}`);
+    newImg.setAttribute("src", `${strMealThumb}`);
     newDiv.appendChild(newImg);
 
     const newFoodItemParagraph = document.createElement("p");
     newFoodItemParagraph.setAttribute("class", "food-item");
-    newFoodItemParagraph.textContent = `${strCategory}`;
+    newFoodItemParagraph.textContent = `${strMeal}`;
 
     const newFoodCostParagraph = document.createElement("p");
     newFoodCostParagraph.setAttribute("class", "food-cost");
@@ -89,7 +90,6 @@ const renderApiMealList = (categories) => {
 ////////FUNCTIONS FOR FEATURES
 //TO ADD PURCHASES TO THE MENU LIST
 const purchase = function (item, cost) {
-  console.log(item, "==item:cost==",cost)
   const html = `<div class="purchase">
   <div class="purchase-item">${item.textContent}</div>
   <div class="purchase-cost">${cost.textContent}</div>
@@ -100,6 +100,7 @@ const purchase = function (item, cost) {
 //TO REMOVE ALREADY SELECTED PURCHASES FROM THE MENU LIST
 const removePurchase = function (foodItem) {
   //converting updated HTMLCollection list to an Array
+  const purchaseMade = document.getElementsByClassName("purchase");
   const purchaseArray = [...purchaseMade];
   const selectedItem = purchaseArray.findIndex((ele) => {
     //looping through the array to return the selected item using the food-item name
@@ -110,20 +111,6 @@ const removePurchase = function (foodItem) {
 };
 
 ////------------------------------------TOTAL-----------------------////
-//TO GET THE TOTAL COST OF THE ITEMS
-const totalCost = function () {
-  const costArray = [...purchaseMade];
-  const reformed = costArray
-    .map((ele) =>
-      Number(ele.lastElementChild.innerText.slice(1).replace(",", ""))
-    )
-    .reduce((acc, ele) => {
-      acc += ele;
-      return acc;
-    }, 0)
-    .toLocaleString();
-  return (result.innerText = `#${reformed}`);
-};
 
 //TO GET THE FINAL TOTAL COST OF ALL ITEMS
 const totalFinal = function (cost) {
@@ -194,11 +181,11 @@ const allOrderedItems = function () {
 const fetchMealCategoriesOnLoad = async () => {
   console.log("triggered");
   try {
-    const response = await fetch(allMealCategory);
+    const response = await fetch(mealsByCategory);
     const data = await response.json();
    // console.log(response, "===DATA==", data);
-    const categories = data?.categories
-    renderApiMealList(categories);
+    const meals = data?.meals
+    renderApiMealList(meals);
   } catch (e) {
     renderApiMealList([]);
   }
