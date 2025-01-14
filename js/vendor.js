@@ -1,3 +1,5 @@
+
+
 const categoryName = localStorage.getItem("categoryName");
 const categoryImage = localStorage.getItem("categoryImage");
 const mealsByCategory = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`;
@@ -68,7 +70,7 @@ const renderApiMealList = (categories) => {
 
     const newFoodCostParagraph = document.createElement("p");
     newFoodCostParagraph.setAttribute("class", "food-cost");
-    newFoodCostParagraph.textContent = `#2,000`;
+    newFoodCostParagraph.textContent = `#${(Math.trunc((Math.random() + 1) * 2000)).toLocaleString()}`;
 
     const newPriceDiv = document.createElement("div");
     newPriceDiv.setAttribute("class", "price");
@@ -179,8 +181,8 @@ const allOrderedItems = function () {
 //VENDOR PAGE AND MENU LIST
 
 const fetchMealCategoriesOnLoad = async () => {
-  console.log("triggered");
   try {
+    showLoader();
     const response = await fetch(mealsByCategory);
     const data = await response.json();
    // console.log(response, "===DATA==", data);
@@ -188,6 +190,8 @@ const fetchMealCategoriesOnLoad = async () => {
     renderApiMealList(meals);
   } catch (e) {
     renderApiMealList([]);
+  }finally{
+    hideLoader();
   }
 };
 fetchMealCategoriesOnLoad();
@@ -205,3 +209,26 @@ toCartPage.addEventListener("click", function () {
   allOrderedItems();
   location.href = `/html/cart.html`;
 });
+
+// Show the loader and disable scrolling
+export function showLoader() {
+  console.log("showloader===")
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+
+  const spinner = document.createElement("div");
+  spinner.classList.add("loader-spinner");
+
+  loader.appendChild(spinner);
+  document.body.appendChild(loader);
+ document.body.classList.add("no-scroll"); // Disable scrolling
+}
+
+// Hide the loader and re-enable scrolling
+export function hideLoader() {
+    document.body.classList.remove('no-scroll'); // Enable scrolling
+    const loader = document.querySelector('.loader');
+    if (loader) {
+        loader.remove();
+    }
+}

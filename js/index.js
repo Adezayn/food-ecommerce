@@ -22,8 +22,8 @@ const optionsBox = document.querySelector(".options");
  };
  
 const fetchMealCategoriesOnLoad = async () => {
-  console.log("triggered fetchMealCategoriesOnLoad");
   try {
+    showLoader();
     const response = await fetch(allMealCategory);
     const data = await response.json();
     // console.log(response, "===DATA==", data);
@@ -31,6 +31,8 @@ const fetchMealCategoriesOnLoad = async () => {
     renderApiCategoryList(categories);
   } catch (e) {
     renderApiCategoryList([]);
+  }finally{
+    hideLoader();
   }
 };
 fetchMealCategoriesOnLoad();
@@ -60,3 +62,26 @@ const renderApiCategoryList = (categories) => {
     domChanges()
   });
 };
+
+
+// Show the loader and disable scrolling
+export function showLoader() {
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+
+  const spinner = document.createElement("div");
+  spinner.classList.add("loader-spinner");
+
+  loader.appendChild(spinner);
+  document.body.appendChild(loader);
+ document.body.classList.add("no-scroll"); // Disable scrolling
+}
+
+// Hide the loader and re-enable scrolling
+export function hideLoader() {
+    document.body.classList.remove('no-scroll'); // Enable scrolling
+    const loader = document.querySelector('.loader');
+    if (loader) {
+        loader.remove();
+    }
+}
