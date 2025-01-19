@@ -70,7 +70,9 @@ const renderApiMealList = (categories) => {
 
     const newFoodCostParagraph = document.createElement("p");
     newFoodCostParagraph.setAttribute("class", "food-cost");
-    newFoodCostParagraph.textContent = `#${(Math.trunc((Math.random() + 1) * 2000)).toLocaleString()}`;
+    newFoodCostParagraph.textContent = `$${Math.trunc(
+      (Math.random() + 1) * 2000
+    ).toLocaleString()}`;
 
     const newPriceDiv = document.createElement("div");
     newPriceDiv.setAttribute("class", "price");
@@ -125,7 +127,7 @@ const totalFinal = function (cost) {
       return acc;
     }, 0)
     .toLocaleString();
-  return (finalCost.innerText = `#${reformed}`);
+  return (finalCost.innerText = `$${reformed}`);
 };
 //////-------------------------------------------------//////////////////
 

@@ -51,7 +51,7 @@ const totalFinal = function (cost) {
       return acc;
     }, 0)
     .toLocaleString();
-  return (finalCost.innerText = `#${reformed}`);
+  return (finalCost.innerText = `$${reformed}`);
 };
 
 //TO CONVERT MONEY STRING TO NUMBER
@@ -103,7 +103,7 @@ for (
       counting[i].innerText = spanCount;
       addItems[i].style.cursor = `pointer`;
       eachCost = defaultCost * spanCount;
-      cost[i].innerText = `#${eachCost.toLocaleString()}`;
+      cost[i].innerText = `$${eachCost.toLocaleString()}`;
       totalFinal(cost);
     } else {
       addItems[i].style.cursor = `auto`;
@@ -116,7 +116,7 @@ for (
       counting[i].innerText = spanCount;
       minusItems[i].style.cursor = `pointer`;
       eachCost = eachCost - defaultCost;
-      cost[i].innerText = `#${eachCost.toLocaleString()}`;
+      cost[i].innerText = `$${eachCost.toLocaleString()}`;
       totalFinal(cost);
     } else {
       minusItems[i].style.cursor = `auto`;
